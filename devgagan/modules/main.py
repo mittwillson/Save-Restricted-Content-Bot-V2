@@ -36,7 +36,7 @@ async def set_interval(user_id, interval_minutes=5):
 
 @app.on_message(filters.regex(r'https?://(?:www\.)?t\.me/[^\s]+'))
 async def single_link(_, message):
-    user_id = message.chat.id
+    user_id = message.from_user.id
     if user_id in batch_mode:
         return
     if users_loop.get(user_id, False):
