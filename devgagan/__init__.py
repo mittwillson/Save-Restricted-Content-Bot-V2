@@ -73,6 +73,9 @@ def is_topic(link):
     s = link.split('/')
     if 't.me' not in s:
         return False
+    nc = s[s.index('t.me') + 1]
+    if len(nc) == 1:
+        return False
     return len(s) - s.index('t.me') -1 >= 3
 
 loop.run_until_complete(restrict_bot())
