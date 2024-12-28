@@ -105,7 +105,7 @@ async def single_link(_, message):
         users_loop[user_id] = False
 @app.on_message(filters.command("batch"))
 async def batch_link(_, message):
-    user_id = message.chat.id
+    user_id = message.from_user.id
     if users_loop.get(user_id, False):
         await app.send_message(
             message.chat.id,
@@ -130,6 +130,9 @@ async def batch_link(_, message):
     while True:
         start = await app.ask(message.chat.id, text="Please send the start link.")
         start_id = start.text.strip()
+        if is_topic(start_id):
+            s = start_id.split('/')
+            start_id = 'https://t.me/c/{}/{}'.format(s[-3], s[-1])
         s = start_id.split("/")[-1]
         try:
             cs = int(s)
