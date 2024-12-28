@@ -516,15 +516,15 @@ async def get_msg(userbot, sender, edit_id, msg_link, i, message):
         edit = await app.edit_message_text(sender, edit_id, "Cloning...")
         try:
             chat = msg_link.split("/")[-2]
-            await copy_message_with_chat_id(app, sender, chat, msg_id) 
+            await copy_message_with_chat_id(app, sender, chat, msg_id, message) 
             await edit.delete()
         except Exception as e:
             await app.edit_message_text(sender, edit_id, f'Failed to save: `{msg_link}`\n\nError: {str(e)}')
 
 
-async def copy_message_with_chat_id(client, sender, chat_id, message_id):
+async def copy_message_with_chat_id(client, sender, chat_id, message_id, origin_message):
     # Get the user's set chat ID, if available; otherwise, use the original sender ID
-    target_chat_id = user_chat_ids.get(sender, sender)
+    target_chat_id = origin_message.chat.id
     
     try:
         # Fetch the message using get_message
