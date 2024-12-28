@@ -69,5 +69,10 @@ async def restrict_bot():
 
     asyncio.create_task(auto_ping())
 
+def is_topic(link):
+    s = link.split('/')
+    if 't.me' not in s:
+        return False
+    return len(s) - s.index('t.me') -1 >= 3
 
 loop.run_until_complete(restrict_bot())

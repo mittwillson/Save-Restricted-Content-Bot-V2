@@ -3,7 +3,7 @@ import random
 import string
 import asyncio
 from pyrogram import filters, Client
-from devgagan import app
+from devgagan import app, is_topic
 from config import API_ID, API_HASH, FREEMIUM_LIMIT, PREMIUM_LIMIT, OWNER_ID
 from devgagan.core.get_func import get_msg
 from devgagan.core.func import *
@@ -32,6 +32,8 @@ async def check_interval(user_id, freecheck):
 async def set_interval(user_id, interval_minutes=5):
     now = datetime.now()
     interval_set[user_id] = now + timedelta(minutes=interval_minutes)
+    
+
 @app.on_message(filters.regex(r'https?://(?:www\.)?t\.me/[^\s]+'))
 async def single_link(_, message):
     user_id = message.chat.id
@@ -59,6 +61,10 @@ async def single_link(_, message):
             users_loop[user_id] = False
             return
         msg = await message.reply("Processing...")
+        if is_topic(link):
+            s = link.split('/')
+            link = 'https://t.me/c/{}/{}'.format(s[-3], s[-1])
+        
         if 't.me/' in link and 't.me/+' not in link and 't.me/c/' not in link and 't.me/b/' not in link:
             await get_msg(None, user_id, msg.id, link, 0, message)
             await set_interval(user_id, interval_minutes=5)

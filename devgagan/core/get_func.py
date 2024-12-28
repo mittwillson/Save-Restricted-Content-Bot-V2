@@ -72,7 +72,11 @@ async def get_msg(userbot, sender, edit_id, msg_link, i, message):
     if 't.me/c/' in msg_link or 't.me/b/' in msg_link:
         parts = msg_link.split("/")
         if 't.me/b/' not in msg_link:
-            chat = int('-100' + str(parts[parts.index('c') + 1])) # topic group/subgroup support enabled
+            chat_id = parts[parts.index('c') + 1]
+            if chat_id.isnumeric():
+                chat = int('-100{}'.format(chat_id))
+            else:
+                chat = chat_id # topic group/subgroup support enabled
         else:
             chat = msg_link.split("/")[-2]
         if chat in saved_channel_ids:
